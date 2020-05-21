@@ -1,0 +1,106 @@
+﻿<Window x:Class="TC.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        
+        xmlns:local="clr-namespace:TC"
+        xmlns:vm="clr-namespace:TC.ViewModel"
+        
+        mc:Ignorable="d"
+        Title="MainWindow" Height="500" Width="800">
+
+    <Window.Resources>
+        <vm:ViewModelTC x:Key="operations"/>
+    </Window.Resources>
+
+
+    <Grid DataContext="{StaticResource operations}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="40"/>
+
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0" Grid.ColumnSpan="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <!--#region Path-->
+            <TextBlock HorizontalAlignment="Left" Grid.Column="0" Text="path" Margin="15, 0, 15, 0"/>
+            <TextBox Grid.Column="0" HorizontalAlignment="Right" Text="{Binding Path=CurrentPathLeft}" IsEnabled="False"/>
+            <TextBlock HorizontalAlignment="Left" Grid.Column="1" Text="path" Margin="15, 0, 15, 0"/>
+            <TextBox Grid.Column="1" HorizontalAlignment="Right" Text="{Binding Path=CurrentPathRight}" IsEnabled="False"/>
+            <!--#endregion-->
+        </Grid>
+        <Grid Grid.Row="1" Grid.ColumnSpan="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <!--#region Drivers-->
+            <TextBlock Grid.Column="0" Text="driver"/>
+            <ComboBox Grid.Column="0" Width="65" HorizontalAlignment="Right" ItemsSource="{Binding Path=DriversListLeft}" SelectedItem="{Binding Path=SelectedDiscLeft}" Margin="5">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="DropDownOpened">
+                        <i:InvokeCommandAction Command="{Binding UpdateLeftDiscsCommand}"/>
+                    </i:EventTrigger>
+                    <i:EventTrigger EventName="SelectionChanged">
+                        <i:InvokeCommandAction Command="{Binding LoadLeftDiscCommand}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </ComboBox>
+            <TextBlock Grid.Column="1" Text="   driver" Margin="5"/>
+            <ComboBox Grid.Column="1" Width="65" HorizontalAlignment="Right" ItemsSource="{Binding Path=DriversListRight}" SelectedItem="{Binding Path=SelectedDiscRight}" Margin="5">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="DropDownOpened">
+                        <i:InvokeCommandAction Command="{Binding UpdateRightDiscsCommand}"/>
+                    </i:EventTrigger>
+                    <i:EventTrigger EventName="SelectionChanged">
+                        <i:InvokeCommandAction Command="{Binding LoadRightDiscCommand}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </ComboBox>
+            <!--#endregion-->
+        </Grid>
+
+        <Grid Grid.Row="2" Grid.ColumnSpan="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <!--#region Lists-->
+            <ListView Grid.Column="0" ItemsSource="{Binding Path = PathsListLeft}" SelectedItem="{Binding Path=NextPathLeft, Mode=TwoWay}">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="SelectionChanged">
+                        <i:InvokeCommandAction Command="{Binding LoadLeftCommand}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </ListView>
+            <ListView Grid.Column="1" ItemsSource="{Binding Path=PathsListRight}" SelectedItem="{Binding Path=NextPathRight, Mode=TwoWay}">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="SelectionChanged">
+                        <i:InvokeCommandAction Command="{Binding LoadRightCommand}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </ListView>
+            <!--#endregion-->
+        </Grid>
+        
+        <!--#region Copy-->
+        <Grid Grid.Row="3" Grid.ColumnSpan="2">
+            <Button HorizontalAlignment="Center" Width="40" Margin="5" Content="Copy" Command="{Binding CopyCommand}"/>
+        </Grid>
+        <!--#endregion-->
+
+
+    </Grid>
+</Window>
